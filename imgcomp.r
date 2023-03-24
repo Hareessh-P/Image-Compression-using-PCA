@@ -26,6 +26,52 @@ df <- data.frame(scheme=rep(c("R", "G", "B"), each=nrow(image)),index=rep(1:nrow
 # Reorder of factors
 df$scheme <- factor(df$scheme, levels(df$scheme)[c(3,2,1)])
 
-# Scree plot 
-df %>% group_by(scheme) %>%mutate(propvar=100*var/sum(var)) %>% ungroup() %>% ggplot(aes(x=index, y=propvar, fill=scheme)) + geom_bar(stat="identity") + geom_line() + labs(title="Scree plot", x="Principal Component", y="% of Variance") + scale_x_continuous(limits=c(0, 20)) + facet_wrap(~scheme) + theme_bw() + theme(legend.title=element_blank(),legend.position="bottom") 
 
+
+
+# Screen plot 
+df %>% 
+  group_by(scheme) %>%
+  mutate(propvar=100*var/sum(var)) %>%
+  ungroup() %>%
+  ggplot(aes(x=index, y=propvar, fill=scheme)) + 
+  geom_bar(stat="identity") +
+  geom_line() + 
+  labs(title="Screen plot", x="Principal Component", 
+       y="% of Variance") + 
+  scale_x_continuous(limits=c(0, 20)) +
+  facet_wrap(~scheme) +
+  theme_bw() +
+  theme(legend.title=element_blank(),
+        legend.position="bottom") 
+
+
+# Cumulative variation plot
+df %>% 
+  group_by(scheme) %>%
+  mutate(propvar=100*var/sum(var)) %>%
+  mutate(cumsum=cumsum(propvar)) %>%
+  ungroup() %>%
+  ggplot(aes(x=index, y=cumsum, fill=scheme)) + 
+  geom_bar(stat="identity") + 
+  geom_line() + 
+  labs(title="Cumulative proportion of variance explained", 
+       x="Principal Component", y="Cumulative % of Variance") + 
+  scale_x_continuous(limits=c(0, 20)) +
+  facet_wrap(~scheme) +
+  theme_bw() +
+  theme(legend.title=element_blank(),
+        legend.position="bottom")
+
+
+
+# PCs values
+pcnum <- c(2, 30, 200, 300)
+
+# Reconstruct the image four times
+for(i in pcnum){
+  pca.img <- sapply(pcaimage, function(j){
+    compressed.img <- j$x[, 1:i] %*% t(j$rotation[, 1:i])
+  }, simplify='array') 
+  writeJPEG(pca.img, paste("C:\\IMG_COMP", round(i, 0), "principal components.jpg"))
+}
