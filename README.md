@@ -1,1 +1,1 @@
-# MyFirstProj-ImageCompression-PCA-
+# Image Compression Using PCA
