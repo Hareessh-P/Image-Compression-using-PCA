@@ -52,5 +52,5 @@ SVD is closely related to PCA and is another method for decomposing a matrix int
 
 This project explores the application of PCA (SVD) for image compression, highlighting its effectiveness in reducing data dimensions while preserving image quality. Understanding these techniques provides insights into their broader applicability across various domains, from image processing to data analytics and beyond.
 
-For detailed implementation and further exploration, refer to the respective sections and additional resources on PCA and SVD.
+#### If you have reached till here, Thankyou :)
 
